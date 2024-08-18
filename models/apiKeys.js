@@ -7,3 +7,4 @@ const apiKeySchema = new mongoose.Schema({
     limit: { type: Number, default: 100 }, // default limit for free
     createdAt: { type: Date, default: Date.now }
 });
+module.exports = mongoose.model('ApiKey', apiKeySchema);
