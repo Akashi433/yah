@@ -2,6 +2,10 @@ const express = require('express');
 const ApiKey = require('../models/apikey.model');
 const router = express.Router();
 
+var creatorList = ['Mamms']; // Nama Lu Ngab
+var creator = creatorList[Math.floor(Math.random() * creatorList.length)]; // Ini jan diubah
+
+
 loghandler = {
     notparam: {
         status: false,
