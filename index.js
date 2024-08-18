@@ -1,28 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const apikeyRoute = require('./routes/apikey.routes');
-
-app.use(express.json());
-app.use('/api', apikeyRoute);
-
-dotenv.config();
+const bodyParser = require('body-parser');
+const apiKeys = require('./routes/apiKeys');
 
 const app = express();
-app.use(express.json());
+const PORT = process.env.PORT || 3000;
 
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+// Connect to MongoDB
+mongoose.connect('mongodb+srv://otsuka:BocahGila@cluster0.ilka0bz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.log(err));
 
-app.use('/api', apikeyRoutes);
+app.use(bodyParser.json());
+app.use('/api', apiKeys);
 
-// reset limit setiap jam
-setInterval(() => {
-  apikeyController.resetLimit();
-}, 3600000); // 1 jam
-
-const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
