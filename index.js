@@ -1,7 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const apikeyRoutes = require('./apikey.routes');
+const apikeyRoute = require('./api/apikey.route');
+
+app.use(express.json());
+app.use('/api', apikeyRoute);
 
 dotenv.config();
 
@@ -13,6 +16,11 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
     .catch(err => console.log(err));
 
 app.use('/api', apikeyRoutes);
+
+// reset limit setiap jam
+setInterval(() => {
+  apikeyController.resetLimit();
+}, 3600000); // 1 jam
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
