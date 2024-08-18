@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://otsuka:BocahGila@cluster0.ilka0bz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://otsuka:BocahGila@cluster0.ilka0bz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
 
 // Define the API key model
 const apiKeyModel = mongoose.model('ApiKey', {
