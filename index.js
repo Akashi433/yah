@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const apikeyRoute = require('./api/apikey.route');
+const apikeyRoute = require('./routes/apikey.route');
 
 app.use(express.json());
 app.use('/api', apikeyRoute);
