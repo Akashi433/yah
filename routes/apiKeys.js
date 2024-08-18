@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ApiKey = require('../models/ApiKey');
+const ApiKey = require('../models/ApiKeys');
 
 // Add API Key
 router.post('/addapikey', async (req, res) => {
