@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ApiKey = require('./models/db.js');
+const ApiKey = require('../models/db.js');
 
 // Middleware untuk reset limit setiap jam
 setInterval(async () => {
