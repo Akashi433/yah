@@ -39,19 +39,19 @@ router.get('/checklimit/:key', async (req, res) => {
     res.status(200).json({ limit: currentLimit });
 });
 
-// Reset Limit setiap jam
+// Reset Limit setiap hari
 setInterval(async () => {
     const currentTime = new Date();
     const apiKeys = await ApiKey.find();
     apiKeys.forEach(async (apiKey) => {
-        const hoursPassed = Math.floor((currentTime - apiKey.lastReset) / (1000 * 60 * 60));
-        if (hoursPassed >= 1) { // reset setiap jam
+        const daysPassed = Math.floor((currentTime - apiKey.lastReset) / (1000 * 60 * 60 * 24));
+        if (daysPassed >= 1) { // reset setiap hari
             apiKey.usageCount = 0;
             apiKey.lastReset = currentTime;
             await apiKey.save();
         }
     });
-}, 3600000); // 1 jam dalam milidetik
+}, 86400000); // 1 hari dalam milidetik
 
 // Middleware untuk mengurangi limit setiap kali API Key digunakan
 router.use(async (req, res, next) => {
