@@ -91,4 +91,24 @@ router.get('/protected', checkAndReduceLimit, (req, res) => {
     res.json({ message: 'This is a protected route' });
 });
 
+router.get('/infonpm', async (req, res, next) => {
+    const apikeyInput = req.query.key;
+    const query = req.query.query;
+    if (!apikeyInput) return res.json({ status: false, message: "API Key tidak ada" });
+    
+    const apiKey = await ApiKey.findOne({ key: apikeyInput });
+    if (!apiKey) return res.json({ status: false, message: "API Key tidak valid" });
+    if (!query) return res.json({ status: false, message: "Masukan parameter query" });
+    
+    // Fetch data dari NPM registry
+    fetch(encodeURI(`https://registry.npmjs.org/${query}`))
+        .then(response => response.json())
+        .then(data => {
+            res.json({ status: 200, result: data });
+        })
+        .catch(e => {
+            res.json({ status: false, message: "Error fetching data" });
+        });
+});
+
 module.exports = router;
