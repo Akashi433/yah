@@ -1,18 +1,20 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
 const apiRouter = require('./router/api');
 
-const app = express();
-app.use(bodyParser.json());
+dotenv.config();
 
-mongoose.connect('mongodb+srv://otsuka:BocahGila@cluster0.ilka0bz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log(err));
+const app = express();
+app.use(express.json());
+
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.log(err));
 
 app.use('/api', apiRouter);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server is running on ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
