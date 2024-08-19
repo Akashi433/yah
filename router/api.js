@@ -40,7 +40,7 @@ router.post('/addpremiumapikey/:key', async (req, res) => {
     const apiKey = await ApiKey.findOne({ key: req.params.key });
     if (apiKey) {
         apiKey.isPremium = true;
-        apiKey.limit = 1; // Limit untuk premium
+        apiKey.limit = 1000; // Limit untuk premium
         await apiKey.save();
         res.json({ message: 'API key upgraded to premium', apiKey });
     } else {
