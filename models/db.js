@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
 const apiKeySchema = new mongoose.Schema({
-    key: { type: String, required: true, unique: true },
-    isPremium: { type: Boolean, default: false },
-    limit: { type: Number, default: 100 }, // Limit untuk free
-    requestsMade: { type: Number, default: 0 },
-    lastReset: { type: Date, default: Date.now }
+  key: { type: String, required: true, unique: true },
+  isPremium: { type: Boolean, default: false },
+  usageCount: { type: Number, default: 0 },
+  limit: { type: Number, default: 100 }, // default limit untuk free
+  createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('ApiKey', apiKeySchema);
+const ApiKey = mongoose.model('ApiKey', apiKeySchema);
+module.exports = ApiKey;
