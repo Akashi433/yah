@@ -1,94 +1,57 @@
 const express = require('express');
 const router = express.Router();
-const ApiKey = require('../models/db.js');
+const ApiKey = require('../models/db');
 
-// Middleware untuk reset limit setiap jam
-setInterval(async () => {
-    const apiKeys = await ApiKey.find({});
-    const now = new Date();
+// Middleware untuk mengecek API Key
+const checkApiKey = async (req, res, next) => {
+  const apiKey = req.headers['apikey'];
+  const keyData = await ApiKey.findOne({ key: apiKey });
 
-    for (const key of apiKeys) {
-        if (now - key.lastReset >= 3600000) { // 1 jam
-            key.requestsMade = 0;
-            key.lastReset = now;
-            await key.save();
-        }
-    }
-}, 60000); // Cek setiap menit
+  if (!keyData) {
+    return res.status(403).send("API Key tidak valid");
+  }
 
-// Tambah API key
-router.post('/addapikey', async (req, res) => {
-    const newKey = new ApiKey({ key: req.body.key });
-    await newKey.save();
-    res.json({ message: 'API key added', key: newKey });
-});
+  if (keyData.usageCount >= keyData.limit) {
+    return res.status(403).send("Limit penggunaan API Key telah tercapai");
+  }
 
-// Hapus API key
-router.delete('/removekey/:key', async (req, res) => {
-    await ApiKey.deleteOne({ key: req.params.key });
-    res.json({ message: 'API key removed' });
-});
-
-// Cek API key
-router.get('/checkapikey/:key', async (req, res) => {
-    const apiKey = await ApiKey.findOne({ key: req.params.key });
-    res.json(apiKey ? { valid: true, apiKey } : { valid: false });
-});
-
-// Tambah premium API key
-router.post('/addpremiumapikey/:key', async (req, res) => {
-    const apiKey = await ApiKey.findOne({ key: req.params.key });
-    if (apiKey) {
-        apiKey.isPremium = true;
-        apiKey.limit = 1000; // Limit untuk premium
-        await apiKey.save();
-        res.json({ message: 'API key upgraded to premium', apiKey });
-    } else {
-        res.status(404).json({ message: 'API key not found' });
-    }
-});
-
-// Cek limit
-router.get('/checklimit/:key', async (req, res) => {
-    const apiKey = await ApiKey.findOne({ key: req.params.key });
-    if (apiKey) {
-        res.json({ limit: apiKey.limit, requestsMade: apiKey.requestsMade });
-    } else {
-        res.status(404).json({ message: 'API key not found' });
-    }
-});
-
-// Reset limit
-router.post('/resetlimit/:key', async (req, res) => {
-    const apiKey = await ApiKey.findOne({ key: req.params.key });
-    if (apiKey) {
-        apiKey.requestsMade = 0;
-        await apiKey.save();
-        res.json({ message: 'Limit reset', apiKey });
-    } else {
-        res.status(404).json({ message: 'API key not found' });
-    }
-});
-
-// Middleware untuk mengurangi limit setiap request
-const checkAndReduceLimit = async (req, res, next) => {
-    const apiKey = await ApiKey.findOne({ key: req.headers['x-api-key'] });
-    if (apiKey) {
-        if (apiKey.requestsMade < apiKey.limit) {
-            apiKey.requestsMade += 1;
-            await apiKey.save();
-            next();
-        } else {
-            res.status(429).json({ message: 'Limit exceeded' });
-        }
-    } else {
-        res.status(404).json({ message: 'API key not found' });
-    }
+  keyData.usageCount += 1; // mengurangi limit
+  await keyData.save();
+  next();
 };
 
-// Contoh route yang dilindungi
-router.get('/protected', checkAndReduceLimit, (req, res) => {
-    res.json({ message: 'This is a protected route' });
+// Tambah API Key
+router.post('/addapikey', async (req, res) => {
+  const newKey = new ApiKey({ key: req.body.key });
+  await newKey.save();
+  res.send("API Key berhasil ditambahkan");
+});
+
+// Hapus API Key
+router.delete('/removekey/:key', async (req, res) => {
+  await ApiKey.deleteOne({ key: req.params.key });
+  res.send("API Key berhasil dihapus");
+});
+
+// Cek API Key
+router.get('/checkapikey/:key', async (req, res) => {
+  const keyData = await ApiKey.findOne({ key: req.params.key });
+  res.send(keyData);
+});
+
+// Tambah API Key Premium
+router.post('/addpremiumapikey/:key', async (req, res) => {
+  const keyData = await ApiKey.findOne({ key: req.params.key });
+  keyData.isPremium = true;
+  keyData.limit = 1000; // limit untuk premium
+  await keyData.save();
+  res.send("API Key diupgrade menjadi premium");
+});
+
+// Cek Limit
+router.get('/checklimit/:key', async (req, res) => {
+  const keyData = await ApiKey.findOne({ key: req.params.key });
+  res.send({ usageCount: keyData.usageCount, limit: keyData.limit });
 });
 
 router.get('/infonpm', async (req, res, next) => {
@@ -104,11 +67,23 @@ router.get('/infonpm', async (req, res, next) => {
     fetch(encodeURI(`https://registry.npmjs.org/${query}`))
         .then(response => response.json())
         .then(data => {
-            res.json({ status: 200, result: data });
+            res.json({ 
+            status: 200, 
+            result: data 
+            });
         })
         .catch(e => {
             res.json({ status: false, message: "Error fetching data" });
         });
 });
+
+// Reset Limit Setiap Jam
+setInterval(async () => {
+  const keys = await ApiKey.find();
+  keys.forEach(async (key) => {
+    key.usageCount = 0;
+    await key.save();
+  });
+}, 60 * 60 * 1000); // setiap jam
 
 module.exports = router;
