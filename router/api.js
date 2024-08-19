@@ -92,7 +92,7 @@ router.get('/protected', checkAndReduceLimit, (req, res) => {
 });
 
 router.get('/infonpm', async (req, res, next) => {
-    const apikeyInput = req.query.key;
+    const apikeyInput = req.query.apikey;
     const query = req.query.query;
     if (!apikeyInput) return res.json({ status: false, message: "API Key tidak ada" });
     
