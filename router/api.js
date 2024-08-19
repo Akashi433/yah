@@ -1,57 +1,73 @@
 const express = require('express');
-const router = express.Router();
 const ApiKey = require('../models/db');
+const router = express.Router();
 
-// Middleware untuk mengecek API Key
-const checkApiKey = async (req, res, next) => {
-  const apiKey = req.headers['apikey'];
-  const keyData = await ApiKey.findOne({ key: apiKey });
-
-  if (!keyData) {
-    return res.status(403).send("API Key tidak valid");
-  }
-
-  if (keyData.usageCount >= keyData.limit) {
-    return res.status(403).send("Limit penggunaan API Key telah tercapai");
-  }
-
-  keyData.usageCount += 1; // mengurangi limit
-  await keyData.save();
-  next();
-};
-
-// Tambah API Key
+// Add API Key
 router.post('/addapikey', async (req, res) => {
-  const newKey = new ApiKey({ key: req.body.key });
-  await newKey.save();
-  res.send("API Key berhasil ditambahkan");
+    const { key } = req.body;
+    const newApiKey = new ApiKey({ key });
+    await newApiKey.save();
+    res.status(201).json({ message: 'API Key added', key });
 });
 
-// Hapus API Key
+// Remove API Key
 router.delete('/removekey/:key', async (req, res) => {
-  await ApiKey.deleteOne({ key: req.params.key });
-  res.send("API Key berhasil dihapus");
+    const { key } = req.params;
+    await ApiKey.deleteOne({ key });
+    res.status(200).json({ message: 'API Key removed', key });
 });
 
-// Cek API Key
+// Check API Key
 router.get('/checkapikey/:key', async (req, res) => {
-  const keyData = await ApiKey.findOne({ key: req.params.key });
-  res.send(keyData);
+    const { key } = req.params;
+    const apiKey = await ApiKey.findOne({ key });
+    res.status(200).json(apiKey ? { valid: true } : { valid: false });
 });
 
-// Tambah API Key Premium
+// Add Premium API Key
 router.post('/addpremiumapikey/:key', async (req, res) => {
-  const keyData = await ApiKey.findOne({ key: req.params.key });
-  keyData.isPremium = true;
-  keyData.limit = 1000; // limit untuk premium
-  await keyData.save();
-  res.send("API Key diupgrade menjadi premium");
+    const { key } = req.params;
+    await ApiKey.updateOne({ key }, { isPremium: true, limit: 500 }); // limit untuk premium
+    res.status(200).json({ message: 'API Key upgraded to premium', key });
 });
 
-// Cek Limit
+// Check Limit
 router.get('/checklimit/:key', async (req, res) => {
-  const keyData = await ApiKey.findOne({ key: req.params.key });
-  res.send({ usageCount: keyData.usageCount, limit: keyData.limit });
+    const { key } = req.params;
+    const apiKey = await ApiKey.findOne({ key });
+    const currentLimit = apiKey ? apiKey.limit - apiKey.usageCount : null;
+    res.status(200).json({ limit: currentLimit });
+});
+
+// Reset Limit setiap jam
+setInterval(async () => {
+    const currentTime = new Date();
+    const apiKeys = await ApiKey.find();
+    apiKeys.forEach(async (apiKey) => {
+        const hoursPassed = Math.floor((currentTime - apiKey.lastReset) / (1000 * 60 * 60));
+        if (hoursPassed >= 1) { // reset setiap jam
+            apiKey.usageCount = 0;
+            apiKey.lastReset = currentTime;
+            await apiKey.save();
+        }
+    });
+}, 3600000); // 1 jam dalam milidetik
+
+// Middleware untuk mengurangi limit setiap kali API Key digunakan
+router.use(async (req, res, next) => {
+    const apiKey = req.query.apikey; // Ambil dari query parameter
+    const apiKeyRecord = await ApiKey.findOne({ key: apiKey });
+    if (apiKeyRecord) {
+        if (apiKeyRecord.usageCount < apiKeyRecord.limit) {
+            apiKeyRecord.usageCount += 1;
+            await apiKeyRecord.save();
+            next();
+        } else {
+            res.status(429).json({ message: 'Limit exceeded' });
+        }
+    } else {
+        res.status(404).json({ message: 'API Key not found' });
+    }
 });
 
 router.get('/infonpm', async (req, res, next) => {
@@ -76,14 +92,5 @@ router.get('/infonpm', async (req, res, next) => {
             res.json({ status: false, message: "Error fetching data" });
         });
 });
-
-// Reset Limit Setiap Jam
-setInterval(async () => {
-  const keys = await ApiKey.find();
-  keys.forEach(async (key) => {
-    key.usageCount = 0;
-    await key.save();
-  });
-}, 60 * 60 * 1000); // setiap jam
 
 module.exports = router;
