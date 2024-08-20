@@ -44,14 +44,14 @@ setInterval(async () => {
     const currentTime = new Date();
     const apiKeys = await ApiKey.find();
     apiKeys.forEach(async (apiKey) => {
-        const minutesPassed = Math.floor((currentTime - apiKey.lastReset) / (1000 * 60));
-        if (minutesPassed >= 1) { // reset setiap hari
+        const daysPassed = Math.floor((currentTime - apiKey.lastReset) / (1000 * 60 * 60 * 24));
+        if (daysPassed >= 1) { // reset setiap hari
             apiKey.usageCount = 0;
             apiKey.lastReset = currentTime;
             await apiKey.save();
         }
     });
-}, 60000); // 1 hari dalam milidetik
+}, 86400000); // 1 hari dalam milidetik
 
 // Middleware untuk mengurangi limit setiap kali API Key digunakan
 router.use(async (req, res, next) => {
