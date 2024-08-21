@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Ayano API's </title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="https://ayano2.vercel.app/vendor/feather/feather.css">
+  <link rel="stylesheet" href="https://ayano2.vercel.app/vendor/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="https://ayano2.vercel.app/vendor/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="https://ayano2.vercel.app/vendor/fontawesome-free/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://ayano2.vercel.app/vendor/typicons/typicons.css">
+  <link rel="stylesheet" href="https://ayano2.vercel.app/vendor/simple-line-icons/css/simple-line-icons.css">
+  <link rel="stylesheet" href="https://ayano2.vercel.app/vendor/css/vendor.bundle.base.css">
+  <link rel="stylesheet" href="https://ayano2.vercel.app/vendor/bootstrap/bootstrap-datepicker.min.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="https://ayano2.vercel.app/vendor/datatables.net-bs4/dataTables.bootstrap4.css">
+  <link rel="stylesheet" type="text/css" href="https://ayano2.vercel.app/js/select.dataTables.min.css">
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="https://ayano2.vercel.app/css/style.css">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="https://ayano2.vercel.app/images/favicon.png" />
+</head>
+
+<body>
+  <!-- partial:partials/_navbar.html -->
+  <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+      <div class="me-3">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
+          <span class="icon-menu"></span>
+        </button>
+      </div>
+      <div>
+        <a class="navbar-brand brand-logo" href="/">
+          <img src="https://ayano2.vercel.app/images/logo.png" alt="logo" />
+        </a>
+        <a class="navbar-brand brand-logo-mini" href="/">
+          <img src="https://ayano2.vercel.app/images/logo-mini.svg" alt="logo" />
+        </a>
+      </div>
+    </div>
+    <div class="navbar-menu-wrapper d-flex align-items-top">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link count-indicator" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
+            <i class="icon-bell"></i>
+            <span class="count"></span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="notificationDropdown">
+            <a class="dropdown-item py-3 border-bottom">
+              <p class="mb-0 fw-medium float-start">You have 4 new notifications </p>
+              <span class="badge badge-pill badge-primary float-end">View all</span>
+            </a>
+            <a class="dropdown-item preview-item py-3">
+              <div class="preview-thumbnail">
+                <i class="mdi mdi-alert m-auto text-primary"></i>
+              </div>
+              <div class="preview-item-content">
+                <h6 class="preview-subject fw-normal text-dark mb-1" id="visits">Visitor....</h6>
+                <p class="fw-light small-text mb-0"> VISITOR </p>
+              </div>
+            </a>
+            <a class="dropdown-item preview-item py-3">
+              <div class="preview-thumbnail">
+                <i class="mdi mdi-lock-outline m-auto text-primary"></i>
+              </div>
+              <div class="preview-item-content">
+                <h6 class="preview-subject fw-normal text-dark mb-1">Settings</h6>
+                <p class="fw-light small-text mb-0"> Private message </p>
+              </div>
+            </a>
+            <a class="dropdown-item preview-item py-3">
+              <div class="preview-thumbnail">
+                <i class="mdi mdi-airballoon m-auto text-primary"></i>
+              </div>
+              <div class="preview-item-content">
+                <h6 class="preview-subject fw-normal text-dark mb-1">New user registration</h6>
+                <p class="fw-light small-text mb-0"> 2 days ago </p>
+              </div>
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="home-tab">
+              <div class="tab-content tab-content-basic">
+                <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview">
+                  <div class="row flex-grow">
+                    <div class="col-12 grid-margin stretch-card">
+                      <div class="card card-rounded">
+                        <div class="card-body">
+                          <div class="d-sm-flex justify-content-between align-items-start">
+                            <div>
+                              <h4 class="card-title card-title-dash">Update Features</h4>
+                            </div>
+                          </div>
+                          <div class="table-responsive  mt-1">
+                            <table class="table select-table">
+                              <thead>
+                                <tr>
+                                  </th>
+                                  <th>Name</th>
+                                  <th>Category</th>
+                                  <th>Information</th>
+                                  <th>Input</th>
+                                  <th>Status</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>
+                                    <div class="d-flex ">
+                                      <div>
+                                        <h6>Wallpaper</h6>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <h6>Image</h6>
+                                  </td>
+                                  <td>
+                                    <h6>Get wallpaper</h6>
+                                  </td>
+                                  <td>
+                                    <h6>query</h6>
+                                  </td>
+                                  <td>
+                                    <div class="badge badge-opacity-warning">ONLINE</div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    <div class="d-flex">
+                                      <div>
+                                        <h6>ytmp3</h6>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <h6>Downloader</h6>
+                                  </td>
+                                  <td>
+                                    <h6>Download YouTube Audio</h6>
+                                  </td>
+                                  <td>
+                                    <h6>Url</h6>
+                                  </td>
+                                  <td>
+                                    <div class="badge badge-opacity-warning">ONLINE</div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    <div class="d-flex">
+                                      <div>
+                                        <h6>Github Stalk</h6>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <h6>Stalk</h6>
+                                  </td>
+                                  <td>
+                                    <h6>Get repo of given github username</h6>
+                                  </td>
+                                  <td>
+                                    <h6>query</h6>
+                                  </td>
+                                  <td>
+                                    <div class="badge badge-opacity-warning">ONLINE</div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    <div class="d-flex">
+                                      <div>
+                                        <h6>Film</h6>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <h6>Search</h6>
+                                  </td>
+                                  <td>
+                                    <h6>Get film</h6>
+                                  </td>
+                                  <td>
+                                    <h6>query</h6>
+                                  </td>
+                                  <td>
+                                    <div class="badge badge-opacity-warning">ONLINE</div
+                                  </td>
+                                </tr>
+                                <tr>
+                                 <td>
+                                  <div class="d-flex">
+                                    <div>
+                                      <h6>Sfilemobi</h6>
+                                    </div>
+                                  </div>
+                                  </td>
+                                  <td>
+                                    <h6>Search</h6>
+                                  </td>
+                                  <td>
+                                    <h6>Get apk</h6>
+                                  </td>
+                                  <td>
+                                    <h6>query</h6>
+                                  </td>
+                                  <td>
+                                    <div class="badge badge-opacity-warning">ONLINE</div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row flex-grow">
+                    <div class="col-md-6 col-lg-6 grid-margin stretch-card">
+                      <div class="card card-rounded">
+                        <div class="card-body card-rounded">
+                          <h4 class="card-title  card-title-dash">Recent Events</h4>
+                          <div class="list align-items-center border-bottom py-2">
+                            <div class="wrapper w-100">
+                              <p class="mb-2 fw-medium"> Change Dashboard</p>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="mdi mdi-calendar text-muted me-1"></i>
+                                  <p class="mb-0 text-small text-muted">Juni 09, 2024</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="list align-items-center border-bottom py-2">
+                            <div class="wrapper w-100">
+                              <p class="mb-2 fw-medium"> Upload To Web</p>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="mdi mdi-calendar text-muted me-1"></i>
+                                  <p class="mb-0 text-small text-muted">Juni 11, 2024</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- content-wrapper ends -->
+                  <!-- partial:partials/_footer.html -->
+                  <footer class="footer">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                      <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright Ayano API's ©2024</span>
+                    </div>
+                  </footer>
+                  <!-- partial -->
+                </div>
+                <!-- main-panel ends -->
+              </div>
+              <!-- page-body-wrapper ends -->
+            </div>
+            <!-- container-scroller -->
+            <!-- plugins:js -->
+            <script src="https://ayano2.vercel.app/vendor/js/vendor.bundle.base.js"></script>
+            <script src="https://ayano2.vercel.app/vendor/bootstrap/bootstrap-datepicker.min.js"></script>
+            <!-- endinject -->
+            <!-- End plugin js for this page -->
+            <!-- inject:js -->
+            <script src="https://ayano2.vercel.app/js/off-canvas.js"></script>
+            <script src="https://ayano2.vercel.app/js/template.js"></script>
+            <script src="https://ayano2.vercel.app/js/settings.js"></script>
+            <script src="https://ayano2.vercel.app/js/hoverable-collapse.js"></script>
+            <script src="https://ayano2.vercel.app/js/todolist.js"></script>
+            <!-- endinject -->
+            <!-- Custom js for this page-->
+            <script src="https://ayano2.vercel.app/js/jquery.cookie.js" type="text/javascript"></script>
+            <script src="https://ayano2.vercel.app/js/dashboard.js"></script>
+            <!-- <script src="js/Chart.roundedBarCharts.js"></script>
+            <script>
+                    function cb(response) {
+                             document.getElementById('visits').innerText = response.value;
+                    }
+            </script>
+            <script async src="https://api.countapi.xyz/hit/ayano2.vercel.app./visits?callback=cb"></script>
+            -->
+            <!-- End custom js for this page-->
+</body>
+
+</html>
