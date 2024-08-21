@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const apiRouter = require('./router/api');
+const mainRouter = require('./router/main');
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
     .catch(err => console.log(err));
 
 app.use('/api', apiRouter);
+app.use('/main', mainRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
