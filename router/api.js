@@ -1,6 +1,6 @@
 const express = require('express');
 const ApiKey = require('../models/db');
-const got = require('../scraper/gpt4');
+const gpt = require('../scraper/gpt4');
 const router = express.Router();
 
 // Add API Key
