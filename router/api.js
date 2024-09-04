@@ -188,7 +188,7 @@ router.get('/ai/gpt', async (req, res, next) => {
     if (!prompt) return res.json({ status: false, message: "Masukan parameter prompt" });
 
     // Panggil fungsi gpt dengan kedua parameter
-    chatgpt(prompt, messages)
+    chatgpt(messages, prompt)
         .then(data => {
             if (!data) return res.json(loghandler.notprompt);
             res.json({
