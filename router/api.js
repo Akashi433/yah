@@ -174,7 +174,7 @@ router.use(async (req, res, next) => {
 
 router.get('/ai/gpt', async (req, res, next) => {
     const apikeyInput = req.query.apikey;
-    const messages = req.query.mesaages; // Query parameter pertama
+    const messages = req.query.messages; // Query parameter pertama
     const prompt = req.query.prompt; // Query parameter kedua
 
     // Validasi API key
