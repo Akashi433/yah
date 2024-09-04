@@ -174,8 +174,8 @@ router.use(async (req, res, next) => {
 
 router.get('/ai/gpt', async (req, res, next) => {
     const apikeyInput = req.query.apikey;
-    const prompt = req.query.prompt; // Query parameter pertama
-    const messages = req.query.messages; // Query parameter kedua
+    const messages = req.query.mesaages; // Query parameter pertama
+    const prompt = req.query.prompt; // Query parameter kedua
 
     // Validasi API key
     if (!apikeyInput) return res.json({ status: false, message: "API Key tidak ada" });
@@ -184,8 +184,8 @@ router.get('/ai/gpt', async (req, res, next) => {
     if (!apiKey) return res.json({ status: false, message: "API Key tidak valid" });
 
     // Validasi prompt dan messages
-    if (!prompt) return res.json({ status: false, message: "Masukan parameter prompt" });
     if (!messages) return res.json({ status: false, message: "Masukan parameter messages" });
+    if (!prompt) return res.json({ status: false, message: "Masukan parameter prompt" });
 
     // Panggil fungsi gpt dengan kedua parameter
     gpt(prompt, messages)
