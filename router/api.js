@@ -3,6 +3,105 @@ const ApiKey = require('../models/db');
 const gpt = require('../scraper/gpt4');
 const router = express.Router();
 
+creator = "MATz"
+
+loghandler = {
+    notparam: {
+        status: false,
+        creator: `${creator}`,
+        code: 406,
+        message: 'Masukan parameter apikey!'
+    },
+    notnama: {
+        status: false,
+        creator: `${creator}`,
+        code: 406,
+        message: 'Masukan parameter nama'
+    },
+    notimg: {
+        status: false,
+        creator: `${creator}`,
+        code: 406,
+        message: 'Masukan parameter img'
+    },
+    notemoji: {
+        status: false,
+        creator: `${creator}`,
+        code: 406,
+        message: 'Masukan parameter emoji'
+    },
+    notangka: {
+        status: false,
+        creator: `${creator}`,
+        code: 406,
+        message: 'Masukan parameter angka'
+    },
+    notnomor: {
+        status: false,
+        creator: `${creator}`,
+        code: 406,
+        message: 'Masukan parameter nomor'
+    },
+    notjumlah: {
+        status: false,
+        creator: `${creator}`,
+        code: 406,
+        message: 'Masukan parameter jumlah'
+    },
+    notkey: {
+        status: false,
+        creator: `${creator}`,
+        code: 406,
+        message: 'Masukan parameter key'
+     },
+    invalidKey: {
+        status: false,
+        creator: `${creator}`,
+        code: 406,
+        message: `Apikey tidak ditemukan! Silahkan kontak Owner untuk dapatkan Apikey wa.me/62895337278647`
+    },
+    invalidtext: {
+            status: false,
+        creator: `${creator}`,
+        message: 'Teks tidak valid'
+    },
+    notAddApiKey: {
+        status: false,
+        creator: `${creator}`,
+        code: 406,
+        message: 'Masukan parameter status, apikeyInput, email, nomorhp, name, age, country, exp'
+    },
+    noturl: {
+        status: false,
+        creator: `${creator}`,
+        code: 406,
+        message: 'Masukan parameter Url'
+    },
+    notprompt: {
+        status: false,
+        creator: `${creator}`,
+        code: 406,
+        message: 'Masukan parameter Url'
+    },
+notmessage: {
+        status: false,
+        creator: `${creator}`,
+        code: 406,
+        message: 'Masukan parameter messages'
+    },
+    notquery: {
+        status: false,
+        creator: `${creator}`,
+        code: 406,
+        message: 'Masukan parameter Query'
+    },
+    error: {
+        status: false,
+        creator: `${creator}`,
+        message: 'Erorr! Mungkin Sedang dalam perbaikan'
+    }
+}
+
 // Add API Key
 router.post('/addapikey', async (req, res) => {
     const { key } = req.body;
@@ -69,6 +168,37 @@ router.use(async (req, res, next) => {
     } else {
         res.status(404).json({ message: 'API Key not found' });
     }
+});
+
+// API
+
+router.get('/ai/gpt', async (req, res, next) => {
+    const apikeyInput = req.query.apikey;
+    const prompt = req.query.prompt; // Query parameter pertama
+    const messages = req.query.messages; // Query parameter kedua
+
+    // Validasi API key
+    if (!apikeyInput) return res.json({ status: false, message: "API Key tidak ada" });
+
+    const apiKey = await ApiKey.findOne({ key: apikeyInput });
+    if (!apiKey) return res.json({ status: false, message: "API Key tidak valid" });
+
+    // Validasi prompt dan messages
+    if (!prompt) return res.json({ status: false, message: "Masukan parameter prompt" });
+    if (!messages) return res.json({ status: false, message: "Masukan parameter messages" });
+
+    // Panggil fungsi gpt dengan kedua parameter
+    gpt(prompt, messages)
+        .then(data => {
+            if (!data) return res.json(loghandler.notprompt);
+            res.json({
+                status: 200,
+                result: data 
+            });
+        })
+        .catch(e => {
+            res.json({ status: false, message: "gagal mengambil data" });
+        });
 });
 
 router.get('/infonpm', async (req, res, next) => {
