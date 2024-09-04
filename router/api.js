@@ -1,6 +1,6 @@
 const express = require('express');
 const ApiKey = require('../models/db');
-const gpt = require('../scraper/gpt4');
+const chatgpt = require('../scraper/gpt4');
 const router = express.Router();
 
 creator = "MATz"
@@ -188,7 +188,7 @@ router.get('/ai/gpt', async (req, res, next) => {
     if (!prompt) return res.json({ status: false, message: "Masukan parameter prompt" });
 
     // Panggil fungsi gpt dengan kedua parameter
-    gpt(prompt, messages)
+    chatgpt(prompt, messages)
         .then(data => {
             if (!data) return res.json(loghandler.notprompt);
             res.json({
